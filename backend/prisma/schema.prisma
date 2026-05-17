@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(uuid())
+  address     String   @unique
+  username    String?
+  xp          Int      @default(0)
+  level       Int      @default(1)
+  wins        Int      @default(0)
+  losses      Int      @default(0)
+  streak      Int      @default(0)
+  maxStreak   Int      @default(0)
+  badges      String[] @default([])
+  referralCode String? @unique
+  referredBy  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  predictions Prediction[]
+  rewards     UserReward[]
+
+  @@map("users")
+}
+
+model GameRound {
+  id           String   @id @default(uuid())
+  asset        String
+  question     String
+  startPrice   Float
+  targetPrice  Float
+  endPrice     Float?
+  direction    String
+  result       String?
+  status       String   @default("active")
+  totalVotes   Int      @default(0)
+  upVotes      Int      @default(0)
+  downVotes    Int      @default(0)
+  startedAt    DateTime @default(now())
+  settledAt    DateTime?
+
+  predictions Prediction[]
+
+  @@map("game_rounds")
+}
+
+model Prediction {
+  id         String    @id @default(uuid())
+  userId     String
+  roundId    String
+  choice     String
+  won        Boolean?
+  xpEarned   Int       @default(0)
+  createdAt  DateTime  @default(now())
+
+  user  User      @relation(fields: [userId], references: [id])
+  round GameRound @relation(fields: [roundId], references: [id])
+
+  @@unique([userId, roundId])
+  @@map("predictions")
+}
+
+model Reward {
+  id          String       @id @default(uuid())
+  name        String
+  description String
+  xpRequired  Int
+  rewardType  String
+  metadata    Json?
+  createdAt   DateTime     @default(now())
+
+  userRewards UserReward[]
+
+  @@map("rewards")
+}
+
+model UserReward {
+  id        String   @id @default(uuid())
+  userId    String
+  rewardId  String
+  claimedAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  reward Reward @relation(fields: [rewardId], references: [id])
+
+  @@unique([userId, rewardId])
+  @@map("user_rewards")
+}
