@@ -131,7 +131,6 @@ export function useGameRound() {
       const round = roundRef.current;
       if (!round || round.status === "settled") return;
 
-      const asset = round.asset;
       const newPrice = generatePriceMovement(round.currentPrice, 0.001);
       addPricePoint(newPrice);
 
