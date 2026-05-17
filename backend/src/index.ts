@@ -13,14 +13,17 @@ dotenv.config();
 const app = express();
 const httpServer = createServer(app);
 
+// In Claude Code deployment, frontend and backend share the same origin
+// so we allow all origins when FRONTEND_URL is not set
+const allowedOrigins = process.env.FRONTEND_URL
+  ? [process.env.FRONTEND_URL]
+  : true;
+
 const io = new Server(httpServer, {
-  cors: {
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
-    methods: ["GET", "POST"],
-  },
+  cors: { origin: allowedOrigins, methods: ["GET", "POST"] },
 });
 
-app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:3000" }));
+app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
 
 app.get("/health", (_req, res) => res.json({ status: "ok", time: new Date().toISOString() }));
