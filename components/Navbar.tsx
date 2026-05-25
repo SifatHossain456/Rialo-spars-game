@@ -38,6 +38,7 @@ export function Navbar() {
             <Link
               key={href}
               href={href}
+              aria-current={pathname === href ? 'page' : undefined}
               className={cn(
                 "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-mono transition-all duration-200",
                 pathname === href
@@ -65,6 +66,7 @@ export function Navbar() {
           <Link
             key={href}
             href={href}
+            aria-current={pathname === href ? 'page' : undefined}
             className={cn(
               "flex-1 flex flex-col items-center gap-0.5 py-2 text-xs font-mono transition-colors",
               pathname === href ? "text-neon-green" : "text-gray-500"

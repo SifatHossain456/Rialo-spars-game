@@ -54,7 +54,7 @@ export default function ArenaPage() {
   })();
 
   return (
-    <div className="min-h-screen cyber-grid-bg px-4 py-8">
+    <main className="min-h-screen cyber-grid-bg px-4 py-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.div
@@ -216,6 +216,6 @@ export default function ArenaPage() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

@@ -51,7 +51,7 @@ const MOCK_LEADERS = [
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen cyber-grid-bg">
+    <main className="min-h-screen cyber-grid-bg">
       {/* Hero */}
       <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 overflow-hidden">
         {/* Glow orbs */}
@@ -270,6 +270,6 @@ export default function LandingPage() {
           Powered by Rialo&apos;s async execution network • Built for the brave
         </p>
       </footer>
-    </div>
+    </main>
   );
 }

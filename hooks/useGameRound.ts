@@ -56,6 +56,7 @@ export function useGameRound() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const priceIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const roundRef = useRef<GameRound | null>(null);
+  const nextRoundScheduledRef = useRef(false);
 
   useEffect(() => {
     if (!currentRound) {
@@ -76,11 +77,15 @@ export function useGameRound() {
       if (!round) return;
 
       if (round.status === "settled") {
-        setTimeout(() => {
-          const newRound = generateRound();
-          setCurrentRound(newRound);
-          setMyPrediction(null);
-        }, 3000);
+        if (!nextRoundScheduledRef.current) {
+          nextRoundScheduledRef.current = true;
+          setTimeout(() => {
+            nextRoundScheduledRef.current = false;
+            const newRound = generateRound();
+            setCurrentRound(newRound);
+            setMyPrediction(null);
+          }, 3000);
+        }
         return;
       }
 
